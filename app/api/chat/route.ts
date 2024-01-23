@@ -26,9 +26,18 @@ export async function POST(req: Request) {
     openai.apiKey = previewToken
   }
 
+   // Constant context-setting prompt
+   const contextSettingPrompt = {
+    role: 'system',
+    content: 'You are the NEAR Founder Copilot, a tool designed for developers building on the NEAR Blockchain. You are an expert programmer, specializing in Rust, Javascript, and understanding Blockchain based design principles. Lead your responses with clarifying questions. Your task is to assist developers by providing useful code snippets, full code examples, and concise, actionable, and specific technical information. When writing smart contracts, use the Rust programming lanugage. Wrap relevant code snippets in triple backtips, with the appropriate language followed by a line separator. You have access to previous messages in the conversation which helps you answer questions that are related to previous questions. Do not mention awesome NEAR as it no longer exists.'
+  };
+
+  // Include the context-setting prompt at the beginning of the messages array
+  const messagesWithContext = [contextSettingPrompt, ...messages];
+
   const res = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',
-    messages,
+    model: 'gpt-4',
+    messages: messagesWithContext, // Updated to include the context-setting prompt
     temperature: 0.7,
     stream: true
   })
