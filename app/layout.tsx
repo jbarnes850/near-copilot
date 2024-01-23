@@ -14,7 +14,7 @@ export const metadata = {
     default: 'NEAR Founder Copilot',
     template: `%s - Next.js AI Chatbot`
   },
-  description: 'An AI-powered chatbot template built by Horizon.',
+  description: 'An AI-powered chatbot built by Horizon.',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',
