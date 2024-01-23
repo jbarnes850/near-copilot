@@ -37,8 +37,9 @@ export async function POST(req: Request) {
 
   const res = await openai.chat.completions.create({
     model: 'gpt-4',
-    messages: messagesWithContext, // Updated to include the context-setting prompt
+    messages: messagesWithContext,
     temperature: 0.7,
+    max_tokens: 800,
     stream: true
   })
 

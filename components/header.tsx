@@ -55,6 +55,8 @@ export function Header() {
         </React.Suspense>
       </div>
       <div className="flex items-center justify-end space-x-2">
+           {/* Comment out or delete the following lines to remove the buttons */}
+        {/* 
         <a
           target="_blank"
           href="https://github.com/vercel/nextjs-ai-chatbot/"
@@ -73,6 +75,7 @@ export function Header() {
           <span className="hidden sm:block">Deploy to Vercel</span>
           <span className="sm:hidden">Deploy</span>
         </a>
+        */}
       </div>
     </header>
   )
