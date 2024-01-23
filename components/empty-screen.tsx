@@ -7,7 +7,7 @@ import { IconArrowRight } from '@/components/ui/icons'
 const exampleMessages = [
   {
     heading: 'Build my first NEAR app',
-    message: `Help me build my first NEAR app, can you walk me through step by step"?`
+    message: `Help me build my first NEAR app, can you walk me through step by step?`
   },
   {
     heading: 'Show me projects building on NEAR',
