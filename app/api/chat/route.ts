@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     model: 'gpt-4',
     messages: messagesWithContext,
     temperature: 0.7,
-    max_tokens: 800,
+    max_tokens: 1000,
     stream: true
   })
 
