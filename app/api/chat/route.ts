@@ -36,10 +36,10 @@ export async function POST(req: Request) {
   const messagesWithContext = [contextSettingPrompt, ...messages];
 
   const res = await openai.chat.completions.create({
-    model: 'gpt-4-1106-preview',
+    model: 'gpt-4-0125-preview',
     messages: messagesWithContext,
-    temperature: 0.7,
-    max_tokens: 1000,
+    temperature: 0.8,
+    max_tokens: 1500,
     stream: true
   })
 
