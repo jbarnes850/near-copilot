@@ -1,6 +1,7 @@
 import { Toaster } from 'react-hot-toast'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { Analytics } from '@vercel/analytics/react';
 
 import '@/app/globals.css'
 import { cn } from '@/lib/utils'
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
           <TailwindIndicator />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
