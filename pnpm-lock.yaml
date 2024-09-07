@@ -114,7 +114,7 @@ importers:
         specifier: ^37.4.0
         version: 37.4.0
       zod:
-        specifier: ^3.23.8
+        specifier: ^3.22.4
         version: 3.23.8
     devDependencies:
       '@tailwindcss/typography':
