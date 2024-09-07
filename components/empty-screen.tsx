@@ -31,12 +31,15 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
           Welcome to the NEAR Founder Copilot!
         </h1>
         <p className="mb-2 leading-normal text-muted-foreground">
-          This is an open source AI chatbot app built by {' '}
-          <ExternalLink href="https://hzn.xyz">Horizon</ExternalLink>
-          .
+          This AI-powered assistant, built by{' '}
+          <ExternalLink href="https://hzn.xyz">Horizon</ExternalLink>,
+          is designed to help you build on NEAR. Find real-time
+          blockchain data, smart contract examples, and best practices for
+          deploying your project.
         </p>
         <p className="leading-normal text-muted-foreground">
-          You can start a conversation here or try the following examples:
+          Ask about NEAR architecture, Rust smart contracts, JavaScript SDK,
+          or try these examples:
         </p>
         <div className="mt-4 flex flex-col items-start space-y-2">
           {exampleMessages.map((message, index) => (
