@@ -89,7 +89,7 @@ Always start by asking clarifying questions to understand the developer's specif
         ...searchContext,
         {
           role: 'system',
-          content: 'In your response, please differentiate between information from your pre-trained knowledge and information from the recent search results. At the end of your response, provide a confidence score (0-100) for your overall answer.'
+          content: 'In your response, please differentiate between information from your pre-trained knowledge and information from the recent search results. At the end of your response, provide a confidence score (0-100) for your overall answer, formatted as [Confidence Score: X].'
         },
         {
           role: 'user',

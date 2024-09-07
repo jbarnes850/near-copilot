@@ -24,6 +24,17 @@ const exampleMessages = [
 ]
 
 export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
+  const handleExampleClick = (message: string) => {
+    setInput(message)
+    // Trigger the chat to send the message immediately
+    setTimeout(() => {
+      const form = document.querySelector('form') as HTMLFormElement
+      if (form) {
+        form.dispatchEvent(new Event('submit', { cancelable: true }))
+      }
+    }, 0)
+  }
+
   return (
     <div className="mx-auto max-w-2xl px-4">
       <div className="rounded-lg border bg-background p-8">
@@ -47,7 +58,7 @@ export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
               key={index}
               variant="link"
               className="h-auto p-0 text-base"
-              onClick={() => setInput(message.message)}
+              onClick={() => handleExampleClick(message.message)}
             >
               <IconArrowRight className="mr-2 text-muted-foreground" />
               {message.heading}
