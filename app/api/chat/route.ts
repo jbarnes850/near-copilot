@@ -13,6 +13,13 @@ const openai = new OpenAI({
 
 const exa = new Exa(process.env.EXA_API_KEY)
 
+interface SearchResult {
+  results: {
+    url: string;
+    text: string;
+  }[];
+}
+
 export async function POST(req: Request) {
   try {
     const json = await req.json()
@@ -50,12 +57,13 @@ Always start by asking clarifying questions to understand the developer's specif
     const messagesWithContext = [contextSettingPrompt, ...messages];
 
     let searchContext: { role: "system"; content: string }[] = [];
+    let searchResult: SearchResult | undefined;
     try {
       // Perform Exa search
       const lastUserMessage = messages[messages.length - 1].content;
-      const searchResult = await exa.searchAndContents(lastUserMessage, {
+      searchResult = await exa.searchAndContents(lastUserMessage, {
         useAutoprompt: true,
-        numResults: 3,
+        numResults: 5,
         includeDomains: ['near.org', 'docs.near.org', 'github.com'],
         startPublishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
         text: true
@@ -63,18 +71,31 @@ Always start by asking clarifying questions to understand the developer's specif
 
       searchContext = searchResult.results.map(result => ({
         role: 'system' as const,
-        content: `Relevant information from ${result.url}:\n${result.text}`
+        content: `[Search Result from ${result.url}]: ${result.text}`
       }));
     } catch (error) {
       console.error('Error performing Exa search:', error);
       // If Exa search fails, we'll continue without the additional context
     }
 
-    const allMessages = [...messagesWithContext, ...searchContext];
-
     const res = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: allMessages,
+      model: 'gpt-4',
+      messages: [
+        ...messagesWithContext,
+        {
+          role: 'system',
+          content: 'The following are recent search results. When using this information, explicitly state that it comes from a recent search and provide the source URL.'
+        },
+        ...searchContext,
+        {
+          role: 'system',
+          content: 'In your response, please differentiate between information from your pre-trained knowledge and information from the recent search results. At the end of your response, provide a confidence score (0-100) for your overall answer.'
+        },
+        {
+          role: 'user',
+          content: messages[messages.length - 1].content
+        }
+      ],
       temperature: 0.7,
       max_tokens: 3000,
       stream: true,
@@ -98,7 +119,8 @@ Always start by asking clarifying questions to understand the developer's specif
               content: completion,
               role: 'assistant'
             }
-          ]
+          ],
+          exaSourcesUsed: searchResult?.results.map((r: { url: string }) => r.url) || []
         }
         kv.hmset(`chat:${id}`, payload)
         kv.zadd(`user:chat:${userId}`, {
