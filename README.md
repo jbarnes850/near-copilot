@@ -29,9 +29,9 @@
 
 ## Features
 
-- Advanced AI assistance for NEAR blockchain development
+- Designed to be a copilot for building on NEAR, with access to NEAR-specific documentation and resources
 - Real-time streaming chat UI
-- Integration with OpenAI's GPT-4 model
+- Integration with OpenAI's GPT-4o model
 - Persistent chat history using Vercel KV
 - Authentication with NextAuth.js
 - Responsive design with Tailwind CSS
