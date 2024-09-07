@@ -1,5 +1,7 @@
 import * as React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import nearLogo from '../public/Near Protocol Logo (4).png'
 
 import { cn } from '@/lib/utils'
 import { auth } from '@/auth'

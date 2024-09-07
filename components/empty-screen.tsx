@@ -10,12 +10,16 @@ const exampleMessages = [
     message: `Help me build my first NEAR app, can you walk me through step by step?`
   },
   {
-    heading: 'Show me projects building on NEAR',
-    message: 'Help me identify projects building on NEAR, Im interested in the following sectors: \n'
+    heading: 'Build my first Rust smart contract',
+    message: 'Show me a basic example of a Rust smart contract for a simple token on NEAR, including main functions and storage.'
   },
   {
-    heading: 'Review my code',
-    message: `Here's my code, can you review this for any bugs or errors: \n`
+    heading: 'Help me integrate a NEAR Wallet',
+    message: 'What are the steps to integrate NEAR Wallet into a JavaScript frontend application? Please provide a code snippet.'
+  },
+  {
+    heading: 'Help me optimize gas fees',
+    message: 'What are some best practices for optimizing gas fees in NEAR smart contracts? Can you provide examples?'
   }
 ]
 

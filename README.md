@@ -1,71 +1,131 @@
 <a href="https://chat.vercel.ai/">
-  <img alt="Next.js 14 and App Router-ready AI chatbot." src="https://chat.vercel.ai/opengraph-image.png">
-  <h1 align="center">Next.js AI Chatbot</h1>
+  <h1 align="center">NEAR Founder Copilot</h1>
 </a>
 
 <p align="center">
-  An open-source AI chatbot app template built with Next.js, the Vercel AI SDK, OpenAI, and Vercel KV.
+  <a href="https://github.com/your-repo/near-founder-copilot/releases">
+    <img src="https://img.shields.io/github/v/release/your-repo/near-founder-copilot?include_prereleases&style=flat-square" alt="GitHub release">
+  </a>
+  <a href="https://github.com/your-repo/near-founder-copilot/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/your-repo/near-founder-copilot?style=flat-square" alt="License">
+  </a>
+  <a href="https://github.com/your-repo/near-founder-copilot/stargazers">
+    <img src="https://img.shields.io/github/stars/your-repo/near-founder-copilot?style=flat-square" alt="GitHub stars">
+  </a>
+</p>
+
+<p align="center">
+  An AI-powered chatbot designed to assist developers building on the NEAR blockchain, built with Next.js, Vercel AI SDK, and OpenAI.
 </p>
 
 <p align="center">
   <a href="#features"><strong>Features</strong></a> ·
-  <a href="#model-providers"><strong>Model Providers</strong></a> ·
-  <a href="#deploy-your-own"><strong>Deploy Your Own</strong></a> ·
-  <a href="#running-locally"><strong>Running locally</strong></a> ·
-  <a href="#authors"><strong>Authors</strong></a>
+  <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
+  <a href="#getting-started"><strong>Getting Started</strong></a> ·
+  <a href="#deployment"><strong>Deployment</strong></a> ·
+  <a href="#roadmap"><strong>Roadmap</strong></a>
 </p>
 <br/>
 
 ## Features
 
-- [Next.js](https://nextjs.org) App Router
-- React Server Components (RSCs), Suspense, and Server Actions
+- Advanced AI assistance for NEAR blockchain development
+- Real-time streaming chat UI
+- Integration with OpenAI's GPT-4 model
+- Persistent chat history using Vercel KV
+- Authentication with NextAuth.js
+- Responsive design with Tailwind CSS
+
+## Tech Stack
+
+- [Next.js](https://nextjs.org) with App Router
 - [Vercel AI SDK](https://sdk.vercel.ai/docs) for streaming chat UI
-- Support for OpenAI (default), Anthropic, Cohere, Hugging Face, or custom AI chat models and/or LangChain
-- [shadcn/ui](https://ui.shadcn.com)
-  - Styling with [Tailwind CSS](https://tailwindcss.com)
-  - [Radix UI](https://radix-ui.com) for headless component primitives
-  - Icons from [Phosphor Icons](https://phosphoricons.com)
-- Chat History, rate limiting, and session storage with [Vercel KV](https://vercel.com/storage/kv)
-- [NextAuth.js](https://github.com/nextauthjs/next-auth) for authentication
+- [OpenAI API](https://openai.com/blog/openai-api) (GPT-4)
+- [Vercel KV](https://vercel.com/storage/kv) for data storage
+- [NextAuth.js](https://next-auth.js.org) for authentication
+- [Tailwind CSS](https://tailwindcss.com) for styling
+- [shadcn/ui](https://ui.shadcn.com) for UI components
 
-## Model Providers
+## Getting Started
 
-This template ships with OpenAI `gpt-3.5-turbo` as the default. However, thanks to the [Vercel AI SDK](https://sdk.vercel.ai/docs), you can switch LLM providers to [Anthropic](https://anthropic.com), [Cohere](https://cohere.com/), [Hugging Face](https://huggingface.co), or using [LangChain](https://js.langchain.com) with just a few lines of code.
+### Prerequisites
 
-## Deploy Your Own
+- Node.js 18+
+- pnpm
+- OpenAI API key
+- Vercel account (for deployment and Vercel KV)
 
-You can deploy your own version of the Next.js AI Chatbot to Vercel with one click:
+### Installation
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?demo-title=Next.js+Chat&demo-description=A+full-featured%2C+hackable+Next.js+AI+chatbot+built+by+Vercel+Labs&demo-url=https%3A%2F%2Fchat.vercel.ai%2F&demo-image=%2F%2Fimages.ctfassets.net%2Fe5382hct74si%2F4aVPvWuTmBvzM5cEdRdqeW%2F4234f9baf160f68ffb385a43c3527645%2FCleanShot_2023-06-16_at_17.09.21.png&project-name=Next.js+Chat&repository-name=nextjs-chat&repository-url=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot&from=templates&skippable-integrations=1&env=OPENAI_API_KEY%2CAUTH_GITHUB_ID%2CAUTH_GITHUB_SECRET%2CAUTH_SECRET&envDescription=How+to+get+these+env+vars&envLink=https%3A%2F%2Fgithub.com%2Fvercel-labs%2Fai-chatbot%2Fblob%2Fmain%2F.env.example&teamCreateStatus=hidden&stores=[{"type":"kv"}])
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/near-founder-copilot.git
+   cd near-founder-copilot
+   ```
 
-## Creating a KV Database Instance
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
 
-Follow the steps outlined in the [quick start guide](https://vercel.com/docs/storage/vercel-kv/quickstart#create-a-kv-database) provided by Vercel. This guide will assist you in creating and configuring your KV database instance on Vercel, enabling your application to interact with it.
+3. Set up environment variables:
+   Copy `.env.example` to `.env.local` and fill in the required values:
+   ```bash
+   cp .env.example .env.local
+   ```
 
-Remember to update your environment variables (`KV_URL`, `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`) in the `.env` file with the appropriate credentials provided during the KV database setup.
+4. Run the development server:
+   ```bash
+   pnpm dev
+   ```
 
-## Running locally
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You will need to use the environment variables [defined in `.env.example`](.env.example) to run Next.js AI Chatbot. It's recommended you use [Vercel Environment Variables](https://vercel.com/docs/projects/environment-variables) for this, but a `.env` file is all that is necessary.
+## Deployment
 
-> Note: You should not commit your `.env` file or it will expose secrets that will allow others to control access to your various OpenAI and authentication provider accounts.
+### Vercel
 
-1. Install Vercel CLI: `npm i -g vercel`
-2. Link local instance with Vercel and GitHub accounts (creates `.vercel` directory): `vercel link`
-3. Download your environment variables: `vercel env pull`
+Deploy your own instance of NEAR Founder Copilot to Vercel:
 
-```bash
-pnpm install
-pnpm dev
-```
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-repo%2Fnear-founder-copilot)
 
-Your app template should now be running on [localhost:3000](http://localhost:3000/).
+### Manual Deployment
 
-## Authors
+1. Build the application:
+   ```bash
+   pnpm build
+   ```
 
-This library is created by [Vercel](https://vercel.com) and [Next.js](https://nextjs.org) team members, with contributions from:
+2. Start the production server:
+   ```bash
+   pnpm start
+   ```
 
-- Jared Palmer ([@jaredpalmer](https://twitter.com/jaredpalmer)) - [Vercel](https://vercel.com)
-- Shu Ding ([@shuding\_](https://twitter.com/shuding_)) - [Vercel](https://vercel.com)
-- shadcn ([@shadcn](https://twitter.com/shadcn)) - [Vercel](https://vercel.com)
+## Roadmap
+
+- [ ] Integrate NEAR-specific documentation and resources
+- [ ] Implement fine-tuned AI model for NEAR development
+- [ ] Add support for code completion and debugging assistance
+- [ ] Integrate with NEAR Explorer for real-time blockchain data
+- [ ] Implement multi-language support
+- [ ] Create a plugin system for extending functionality
+
+## Contributing
+
+We welcome contributions to the NEAR Founder Copilot! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Vercel](https://vercel.com) for the Next.js framework and Vercel AI SDK
+- [OpenAI](https://openai.com) for the GPT-4o model
+- [NEAR Protocol](https://near.org) for the blockchain platform
+
+---
+
+<p align="center">
+  Built with ❤️ by the NEAR community
+</p>
