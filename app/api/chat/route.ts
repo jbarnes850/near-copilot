@@ -2,7 +2,6 @@ import { kv } from '@vercel/kv'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
 import OpenAI from 'openai'
 import Exa from 'exa-js'
-import { getLatestBlocks, getAccountInfo, getTransactionInfo } from '@/lib/nearblocks'
 import { auth } from '@/auth'
 import { nanoid } from '@/lib/utils'
 
@@ -13,61 +12,6 @@ const openai = new OpenAI({
 })
 
 const exa = new Exa(process.env.EXA_API_KEY)
-
-// Define tools
-const tools = [
-  {
-    type: 'function',
-    function: {
-      name: 'getLatestBlocks',
-      description: 'Get the latest blocks from the NEAR blockchain',
-      parameters: {
-        type: 'object',
-        properties: {
-          limit: {
-            type: 'number',
-            description: 'Number of latest blocks to retrieve (default: 5)',
-          },
-        },
-        required: [],
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'getAccountInfo',
-      description: 'Get information about a NEAR account',
-      parameters: {
-        type: 'object',
-        properties: {
-          accountId: {
-            type: 'string',
-            description: 'The NEAR account ID to look up',
-          },
-        },
-        required: ['accountId'],
-      },
-    },
-  },
-  {
-    type: 'function',
-    function: {
-      name: 'getTransactionInfo',
-      description: 'Get information about a NEAR transaction',
-      parameters: {
-        type: 'object',
-        properties: {
-          txHash: {
-            type: 'string',
-            description: 'The transaction hash to look up',
-          },
-        },
-        required: ['txHash'],
-      },
-    },
-  },
-];
 
 export async function POST(req: Request) {
   try {
@@ -113,7 +57,6 @@ Always start by asking clarifying questions to understand the developer's specif
         useAutoprompt: true,
         numResults: 3,
         includeDomains: ['near.org', 'docs.near.org', 'github.com'],
-        excludeDomains: ['youtube.com', 'twitter.com'],
         startPublishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
         text: true
       });
@@ -133,25 +76,12 @@ Always start by asking clarifying questions to understand the developer's specif
       model: 'gpt-4o',
       messages: allMessages,
       temperature: 0.7,
-      max_tokens: 2000,
+      max_tokens: 3000,
       stream: true,
-      tools: tools.map(tool => ({
-        type: 'function',
-        function: {
-          name: tool.function.name,
-          description: tool.function.description,
-          parameters: tool.function.parameters
-        }
-      })),
-      tool_choice: 'auto',
     });
 
     const stream = OpenAIStream(res, {
-      async experimental_onFunctionCall(functionCall) {
-        const result = await handleFunctionCall(functionCall);
-        return result ? JSON.stringify(result) : undefined;
-      },
-      async onCompletion(completion) {
+      onCompletion(completion) {
         const title = json.messages[0].content.substring(0, 100)
         const id = json.id ?? nanoid()
         const createdAt = Date.now()
@@ -170,8 +100,8 @@ Always start by asking clarifying questions to understand the developer's specif
             }
           ]
         }
-        await kv.hmset(`chat:${id}`, payload)
-        await kv.zadd(`user:chat:${userId}`, {
+        kv.hmset(`chat:${id}`, payload)
+        kv.zadd(`user:chat:${userId}`, {
           score: createdAt,
           member: `chat:${id}`
         })
@@ -183,25 +113,4 @@ Always start by asking clarifying questions to understand the developer's specif
     console.error('Error in chat route:', error)
     return new Response('An error occurred', { status: 500 })
   }
-}
-
-async function handleFunctionCall(functionCall: any) {
-  if (functionCall.name === 'getLatestBlocks') {
-    const args = functionCall.arguments ? JSON.parse(functionCall.arguments) : {};
-    const limit = args.limit || 5;
-    return await getLatestBlocks(limit);
-  } else if (functionCall.name === 'getAccountInfo') {
-    const args = functionCall.arguments ? JSON.parse(functionCall.arguments) : {};
-    if (!args.accountId) {
-      throw new Error('accountId is required for getAccountInfo');
-    }
-    return await getAccountInfo(args.accountId);
-  } else if (functionCall.name === 'getTransactionInfo') {
-    const args = functionCall.arguments ? JSON.parse(functionCall.arguments) : {};
-    if (!args.txHash) {
-      throw new Error('txHash is required for getTransactionInfo');
-    }
-    return await getTransactionInfo(args.txHash);
-  }
-  return null;
 }
