@@ -1,7 +1,6 @@
 'use client'
 
 import { useChat, type Message } from 'ai/react'
-
 import { cn } from '@/lib/utils'
 import { ChatList } from '@/components/chat-list'
 import { ChatPanel } from '@/components/chat-panel'
@@ -57,14 +56,13 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
       }
     })
 
-  const handleNewMessage = async (message: Message | string) => {
-    const content = typeof message === 'string' ? message : message.content
-    await append({
-      content,
-      role: 'user'
-    })
-    if (!path.includes('chat')) {
-      router.push(`/chat/${id}`)
+  const handleSubmit = (userInput: string) => {
+    if (userInput.trim()) {
+      append({
+        content: userInput,
+        role: 'user'
+      })
+      setInput('')
     }
   }
 
@@ -77,14 +75,14 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
         ) : (
-          <EmptyScreen setInput={setInput} append={append} />
+          <EmptyScreen setInput={setInput} />
         )}
       </div>
       <ChatPanel
         id={id}
         isLoading={isLoading}
         stop={stop}
-        append={append}
+        append={handleSubmit}
         reload={reload}
         messages={messages}
         input={input}
