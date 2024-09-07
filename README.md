@@ -3,19 +3,14 @@
 </a>
 
 <p align="center">
-  <a href="https://github.com/your-repo/near-founder-copilot/releases">
-    <img src="https://img.shields.io/github/v/release/your-repo/near-founder-copilot?include_prereleases&style=flat-square" alt="GitHub release">
-  </a>
-  <a href="https://github.com/your-repo/near-founder-copilot/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/your-repo/near-founder-copilot?style=flat-square" alt="License">
-  </a>
-  <a href="https://github.com/your-repo/near-founder-copilot/stargazers">
-    <img src="https://img.shields.io/github/stars/your-repo/near-founder-copilot?style=flat-square" alt="GitHub stars">
+  <img src="https://img.shields.io/badge/Version-1.3.0-blue?style=flat-square" alt="NEAR Founder Copilot Version">
+  <a href="https://twitter.com/nearprotocol">
+    <img src="https://img.shields.io/twitter/follow/nearprotocol?style=social" alt="Follow NEAR Protocol on Twitter">
   </a>
 </p>
 
 <p align="center">
-  An AI-powered chatbot designed to assist developers building on the NEAR blockchain, built with Next.js, Vercel AI SDK, and OpenAI.
+  An AI-powered chatbot designed to assist developers building on the NEAR blockchain, built with Next.js, Vercel AI SDK, OpenAI, Exa Search, and NEARBlocks API.
 </p>
 
 <p align="center">
@@ -29,9 +24,8 @@
 
 ## Features
 
-- Designed to be a copilot for building on NEAR, with access to NEAR-specific documentation and resources
-- Real-time streaming chat UI
-- Integration with OpenAI's GPT-4o model
+- Dynamic access to up-to-date NEAR documentation and resources via Exa Search
+- Integration with NEARBlocks API for real-time blockchain data
 - Persistent chat history using Vercel KV
 - Authentication with NextAuth.js
 - Responsive design with Tailwind CSS
@@ -40,7 +34,9 @@
 
 - [Next.js](https://nextjs.org) with App Router
 - [Vercel AI SDK](https://sdk.vercel.ai/docs) for streaming chat UI
-- [OpenAI API](https://openai.com/blog/openai-api) (GPT-4)
+- [OpenAI API](https://openai.com/blog/openai-api) (GPT-4o model)
+- [Exa Search](https://exa.ai) for real-time access to NEAR documentation
+- [NEARBlocks API](https://api.nearblocks.io/api-docs/#/) for blockchain data
 - [Vercel KV](https://vercel.com/storage/kv) for data storage
 - [NextAuth.js](https://next-auth.js.org) for authentication
 - [Tailwind CSS](https://tailwindcss.com) for styling
@@ -53,6 +49,8 @@
 - Node.js 18+
 - pnpm
 - OpenAI API key
+- Exa Search API key
+- NEARBlocks API key
 - Vercel account (for deployment and Vercel KV)
 
 ### Installation
@@ -103,12 +101,16 @@ Deploy your own instance of NEAR Founder Copilot to Vercel:
 
 ## Roadmap
 
-- [ ] Integrate NEAR-specific documentation and resources
-- [ ] Implement fine-tuned AI model for NEAR development
+- [x] Integrate NEAR-specific documentation and resources via Exa Search
+- [x] Implement latest GPT-4o model for improved performance
+- [x] Integrate NEARBlocks API for real-time blockchain data
+- [ ] Enhance context management for more coherent multi-turn conversations
+- [ ] Implement fine-tuned AI model specifically for NEAR development
 - [ ] Add support for code completion and debugging assistance
-- [ ] Integrate with NEAR Explorer for real-time blockchain data
 - [ ] Implement multi-language support
 - [ ] Create a plugin system for extending functionality
+- [ ] Develop a feedback mechanism for continuous improvement of responses
+- [ ] Implement advanced caching strategies for faster response times
 
 ## Contributing
 
@@ -122,6 +124,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Vercel](https://vercel.com) for the Next.js framework and Vercel AI SDK
 - [OpenAI](https://openai.com) for the GPT-4o model
+- [Exa](https://exa.ai) for providing real-time access to NEAR documentation
+- [NEARBlocks](https://nearblocks.io/) for blockchain data API
 - [NEAR Protocol](https://near.org) for the blockchain platform
 
 ---
