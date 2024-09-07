@@ -18,7 +18,8 @@
   <a href="#tech-stack"><strong>Tech Stack</strong></a> ·
   <a href="#getting-started"><strong>Getting Started</strong></a> ·
   <a href="#deployment"><strong>Deployment</strong></a> ·
-  <a href="#roadmap"><strong>Roadmap</strong></a>
+  <a href="#roadmap"><strong>Roadmap</strong></a> ·
+  <a href="#chat-history-analysis"><strong>Chat History Analysis</strong></a>
 </p>
 <br/>
 
@@ -111,6 +112,28 @@ Deploy your own instance of NEAR Founder Copilot to Vercel:
 - [ ] Create a plugin system for extending functionality
 - [ ] Develop a feedback mechanism for continuous improvement of responses
 - [ ] Implement advanced caching strategies for faster response times
+
+## Chat History Analysis
+
+The NEAR Founder Copilot includes a chat history analysis feature that provides insights into user interactions and common queries. This analysis helps improve the copilot's responses and identify areas for further development.
+
+### Key Components
+
+- **Data Collection**: Chat histories are stored securely using Vercel KV.
+- **Analysis Scripts**: Python scripts (`analyze_chats.py` and `reformat_text.py`) process and analyze the chat data.
+- **Visualization**: The analysis generates visualizations of top user queries and interaction patterns.
+
+### Insights Gained
+
+- Identification of common user questions and topics
+- Trends in NEAR development interests
+- Areas where additional documentation or resources may be needed
+
+### Privacy and Data Protection
+
+We take user privacy seriously. All chat data is anonymized before analysis, ensuring that individual users cannot be identified. The data is kept strictly confidential and is used solely for improving the NEAR Founder Copilot's performance and understanding broader trends in NEAR development queries. We do not share or expose any user-specific information, maintaining the trust and privacy of our developer community.
+
+The chat history analysis contributes to the continuous improvement of the NEAR Founder Copilot, ensuring it remains a valuable tool for the NEAR developer community while respecting user privacy.
 
 ## Contributing
 

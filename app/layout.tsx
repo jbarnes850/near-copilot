@@ -13,11 +13,11 @@ export const metadata = {
   metadataBase: new URL(`https://${process.env.VERCEL_URL}`),
   title: {
     default: 'NEAR Founder Copilot',
-    template: `%s - Next.js AI Chatbot`
+    template: `%s - NEAR Founder Copilot`
   },
-  description: 'An AI-powered chatbot built by Horizon.',
+  description: 'An AI-powered chatbot built by NEAR Horizon.',
   icons: {
-    icon: '/favicon.ico',
+    icon: '/icon.png',
     shortcut: '/favicon-16x16.png',
     apple: '/apple-touch-icon.png'
   }
