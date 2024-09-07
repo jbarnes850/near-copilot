@@ -23,16 +23,13 @@ const exampleMessages = [
   }
 ]
 
-export function EmptyScreen({ setInput }: Pick<UseChatHelpers, 'setInput'>) {
+export function EmptyScreen({ setInput, append }: Pick<UseChatHelpers, 'setInput' | 'append'>) {
   const handleExampleClick = (message: string) => {
     setInput(message)
-    // Trigger the chat to send the message immediately
-    setTimeout(() => {
-      const form = document.querySelector('form') as HTMLFormElement
-      if (form) {
-        form.dispatchEvent(new Event('submit', { cancelable: true }))
-      }
-    }, 0)
+    append({
+      content: message,
+      role: 'user'
+    })
   }
 
   return (

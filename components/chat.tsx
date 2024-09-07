@@ -56,6 +56,18 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
         }
       }
     })
+
+  const handleNewMessage = async (message: Message | string) => {
+    const content = typeof message === 'string' ? message : message.content
+    await append({
+      content,
+      role: 'user'
+    })
+    if (!path.includes('chat')) {
+      router.push(`/chat/${id}`)
+    }
+  }
+
   return (
     <>
       <div className={cn('pb-[200px] pt-4 md:pt-10', className)}>
@@ -65,7 +77,7 @@ export function Chat({ id, initialMessages, className }: ChatProps) {
             <ChatScrollAnchor trackVisibility={isLoading} />
           </>
         ) : (
-          <EmptyScreen setInput={setInput} />
+          <EmptyScreen setInput={setInput} append={append} />
         )}
       </div>
       <ChatPanel
