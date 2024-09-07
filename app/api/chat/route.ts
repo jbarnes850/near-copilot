@@ -70,22 +70,23 @@ const tools = [
 ];
 
 export async function POST(req: Request) {
-  const json = await req.json()
-  const { messages, previewToken } = json
-  const userId = (await auth())?.user.id
+  try {
+    const json = await req.json()
+    const { messages, previewToken } = json
+    const userId = (await auth())?.user.id
 
-  if (!userId) {
-    return new Response('Unauthorized', { status: 401 })
-  }
+    if (!userId) {
+      return new Response('Unauthorized', { status: 401 })
+    }
 
-  if (previewToken) {
-    openai.apiKey = previewToken
-  }
+    if (previewToken) {
+      openai.apiKey = previewToken
+    }
 
-  // Constant context-setting prompt
-  const contextSettingPrompt = {
-    role: 'system',
-    content: `You are the NEAR Founder Copilot, an advanced AI assistant specialized in helping developers build on the NEAR blockchain. Your knowledge encompasses:
+    // Constant context-setting prompt
+    const contextSettingPrompt = {
+      role: 'system',
+      content: `You are the NEAR Founder Copilot, an advanced AI assistant specialized in helping developers build on the NEAR blockchain. Your knowledge encompasses:
 
 1. NEAR Protocol architecture and core concepts
 2. Smart contract development using Rust
@@ -100,78 +101,88 @@ export async function POST(req: Request) {
 Provide concise, accurate, and actionable responses. Offer code snippets in Rust for smart contracts and JavaScript for frontend integration when relevant. Prioritize security, scalability, and best practices in your recommendations. If unsure, use the Exa search capability to find the most up-to-date information from NEAR documentation and resources.
 
 Always start by asking clarifying questions to understand the developer's specific needs and context before providing detailed solutions.`
-  };
+    };
 
-  const messagesWithContext = [contextSettingPrompt, ...messages];
+    const messagesWithContext = [contextSettingPrompt, ...messages];
 
-  // Perform Exa search
-  const lastUserMessage = messages[messages.length - 1].content;
-  const searchResult = await exa.searchAndContents(lastUserMessage, {
-    useAutoprompt: true,
-    numResults: 3,
-    includeDomains: ['near.org', 'docs.near.org', 'github.com/near'],
-    excludeDomains: ['youtube.com', 'twitter.com'],
-    startPublishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    text: true
-  });
+    let searchContext: { role: "system"; content: string }[] = [];
+    try {
+      // Perform Exa search
+      const lastUserMessage = messages[messages.length - 1].content;
+      const searchResult = await exa.searchAndContents(lastUserMessage, {
+        useAutoprompt: true,
+        numResults: 3,
+        includeDomains: ['near.org', 'docs.near.org', 'github.com'],
+        excludeDomains: ['youtube.com', 'twitter.com'],
+        startPublishedDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        text: true
+      });
 
-  const searchContext = searchResult.results.map(result => ({
-    role: 'system' as const,
-    content: `Relevant information from ${result.url}:\n${result.text}`
-  }));
-
-  const allMessages = [...messagesWithContext, ...searchContext];
-
-  const res = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: allMessages,
-    temperature: 0.7,
-    max_tokens: 2000,
-    stream: true,
-    tools: tools.map(tool => ({
-      type: 'function',
-      function: {
-        name: tool.function.name,
-        description: tool.function.description,
-        parameters: tool.function.parameters
-      }
-    })) as OpenAI.Chat.Completions.ChatCompletionTool[],
-    tool_choice: 'auto',
-  });
-
-  const stream = OpenAIStream(res, {
-    async experimental_onFunctionCall(functionCall) {
-      const result = await handleFunctionCall(functionCall);
-      return result ? JSON.stringify(result) : undefined;
-    },
-    async onCompletion(completion) {
-      const title = json.messages[0].content.substring(0, 100)
-      const id = json.id ?? nanoid()
-      const createdAt = Date.now()
-      const path = `/chat/${id}`
-      const payload = {
-        id,
-        title,
-        userId,
-        createdAt,
-        path,
-        messages: [
-          ...messages,
-          {
-            content: completion,
-            role: 'assistant'
-          }
-        ]
-      }
-      await kv.hmset(`chat:${id}`, payload)
-      await kv.zadd(`user:chat:${userId}`, {
-        score: createdAt,
-        member: `chat:${id}`
-      })
+      searchContext = searchResult.results.map(result => ({
+        role: 'system' as const,
+        content: `Relevant information from ${result.url}:\n${result.text}`
+      }));
+    } catch (error) {
+      console.error('Error performing Exa search:', error);
+      // If Exa search fails, we'll continue without the additional context
     }
-  })
 
-  return new StreamingTextResponse(stream)
+    const allMessages = [...messagesWithContext, ...searchContext];
+
+    const res = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: allMessages,
+      temperature: 0.7,
+      max_tokens: 2000,
+      stream: true,
+      tools: tools.map(tool => ({
+        type: 'function',
+        function: {
+          name: tool.function.name,
+          description: tool.function.description,
+          parameters: tool.function.parameters
+        }
+      })),
+      tool_choice: 'auto',
+    });
+
+    const stream = OpenAIStream(res, {
+      async experimental_onFunctionCall(functionCall) {
+        const result = await handleFunctionCall(functionCall);
+        return result ? JSON.stringify(result) : undefined;
+      },
+      async onCompletion(completion) {
+        const title = json.messages[0].content.substring(0, 100)
+        const id = json.id ?? nanoid()
+        const createdAt = Date.now()
+        const path = `/chat/${id}`
+        const payload = {
+          id,
+          title,
+          userId,
+          createdAt,
+          path,
+          messages: [
+            ...messages,
+            {
+              content: completion,
+              role: 'assistant'
+            }
+          ]
+        }
+        await kv.hmset(`chat:${id}`, payload)
+        await kv.zadd(`user:chat:${userId}`, {
+          score: createdAt,
+          member: `chat:${id}`
+        })
+      }
+    });
+
+    return new StreamingTextResponse(stream)
+  } catch (error) {
+    console.error('Error in chat route:', error)
+    return new Response('An error occurred', { status: 500 })
+  }
 }
 
 async function handleFunctionCall(functionCall: any) {
