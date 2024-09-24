@@ -79,7 +79,7 @@ Always start by asking clarifying questions to understand the developer's specif
     }
 
     const res = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4o-2024-08-06',
       messages: [
         ...messagesWithContext,
         {
